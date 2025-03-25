@@ -13,7 +13,9 @@ public class ScraperService {
     private static final String SITE_URL = "https://www.gov.br/ans/pt-br/acesso-a-informacao/participacao-da-sociedade/atualizacao-do-rol-de-procedimentos";
 
     public static List<String> extractPdfLinks() throws IOException {
-        Document doc = Jsoup.connect(SITE_URL).get();
+        Document doc = Jsoup.connect(SITE_URL)
+                .timeout(10_000)
+                .get();
 
         // Seleciona todos os links
         Elements links = doc.select("a.internal-link[href]");
