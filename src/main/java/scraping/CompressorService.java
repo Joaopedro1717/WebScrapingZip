@@ -2,12 +2,13 @@ package scraping;
 
 import java.io.*;
 import java.nio.file.*;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class CompressorService {
 
-    public static void zipFiles(String[] files, String zipFilePath) throws IOException {
+    public static void zipFiles(List<String> files, String zipFilePath) throws IOException {
         try (ZipOutputStream zipOut = new ZipOutputStream(Files.newOutputStream(Paths.get(zipFilePath)))) {
             for (String filePath : files) {
                 File fileToZip = new File(filePath);

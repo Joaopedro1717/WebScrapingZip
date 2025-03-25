@@ -3,21 +3,29 @@ package webscraping;
 import scraping.CompressorService;
 import scraping.DownloaderService;
 import scraping.ScraperService;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class WebScrapingApplication {
     private static final String ZIP_FILE_PATH = "C:\\Users\\Public\\Downloads\\anexos.zip";
 
     public static void main(String[] args) {
         try {
-            // 1. Obtém os links dos anexos
-            String[] fileUrls = ScraperService.extractPdfLinks().toArray(new String[0]); // Alterado aqui
+            // 1. Obtém os links apenas dos anexos desejados
+            List<String> fileUrls = ScraperService.extractPdfLinks().stream()
+                    .filter(url -> url.contains("Anexo_I") || url.contains("Anexo_II")) // Filtra apenas os anexos corretos
+                    .collect(Collectors.toList());
 
-            // 2. Baixa os arquivos
-            String file1 = DownloaderService.downloadFile(fileUrls[0]);
-            String file2 = DownloaderService.downloadFile(fileUrls[1]);
+            if (fileUrls.isEmpty()) {
+                System.out.println("Os anexos não foram encontrados. Encerrando...");
+                return;
+            }
+
+            // 2. Baixa os arquivos em paralelo
+            List<String> downloadedFiles = DownloaderService.downloadFilesParallel(fileUrls);
 
             // 3. Compacta os arquivos baixados
-            CompressorService.zipFiles(new String[]{file1, file2}, ZIP_FILE_PATH);
+            CompressorService.zipFiles(downloadedFiles, ZIP_FILE_PATH);
 
             System.out.println("Processo concluído! Arquivo ZIP gerado em: " + ZIP_FILE_PATH);
         } catch (Exception e) {
