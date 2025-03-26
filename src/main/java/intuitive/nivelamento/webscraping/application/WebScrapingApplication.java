@@ -13,7 +13,7 @@ public class WebScrapingApplication {
     private final ScraperInterface scraper;
     private final DownloaderInterface downloader;
     private final CompressorInterface compressor;
-    
+
     public WebScrapingApplication(ScraperInterface scraper, DownloaderInterface downloader, CompressorInterface compressor) {
         this.scraper = scraper;
         this.downloader = downloader;
