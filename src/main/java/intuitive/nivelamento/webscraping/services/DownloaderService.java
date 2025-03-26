@@ -1,4 +1,4 @@
-package scraping;
+package intuitive.nivelamento.webscraping.services;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -14,7 +14,7 @@ public class DownloaderService {
 
     public static List<String> downloadFilesParallel(List<String> fileUrls) throws InterruptedException, ExecutionException {
         try {
-            Files.createDirectories(Paths.get(DOWNLOAD_DIR)); // Pode lançar IOException
+            Files.createDirectories(Paths.get(DOWNLOAD_DIR));
         } catch (IOException e) {
             throw new RuntimeException("Erro ao criar diretório de downloads", e);
         }

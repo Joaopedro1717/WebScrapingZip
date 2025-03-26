@@ -1,8 +1,8 @@
-package webscraping;
+package intuitive.nivelamento.webscraping.application;
 
-import scraping.CompressorService;
-import scraping.DownloaderService;
-import scraping.ScraperService;
+import intuitive.nivelamento.webscraping.services.CompressorService;
+import intuitive.nivelamento.webscraping.services.DownloaderService;
+import intuitive.nivelamento.webscraping.services.ScraperService;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,9 +11,9 @@ public class WebScrapingApplication {
 
     public static void main(String[] args) {
         try {
-            // 1. Obtém os links apenas dos anexos desejados
+
             List<String> fileUrls = ScraperService.extractPdfLinks().stream()
-                    .filter(url -> url.contains("Anexo_I") || url.contains("Anexo_II")) // Filtra apenas os anexos corretos
+                    .filter(url -> url.contains("Anexo_I") || url.contains("Anexo_II"))
                     .collect(Collectors.toList());
 
             if (fileUrls.isEmpty()) {
@@ -21,10 +21,8 @@ public class WebScrapingApplication {
                 return;
             }
 
-            // 2. Baixa os arquivos em paralelo
             List<String> downloadedFiles = DownloaderService.downloadFilesParallel(fileUrls);
 
-            // 3. Compacta os arquivos baixados
             CompressorService.zipFiles(downloadedFiles, ZIP_FILE_PATH);
 
             System.out.println("Processo concluído! Arquivo ZIP gerado em: " + ZIP_FILE_PATH);

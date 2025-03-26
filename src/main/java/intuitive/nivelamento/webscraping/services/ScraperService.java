@@ -1,4 +1,4 @@
-package scraping;
+package intuitive.nivelamento.webscraping.services;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -17,7 +17,6 @@ public class ScraperService {
                 .timeout(10_000)
                 .get();
 
-        // Seleciona todos os links
         Elements links = doc.select("a.internal-link[href]");
         if (links.isEmpty()) {
             throw new IllegalStateException("Nenhum link encontrado!");
@@ -25,9 +24,8 @@ public class ScraperService {
 
         List<String> pdfLinks = new ArrayList<>();
         for (Element link : links) {
-            String url = link.absUrl("href"); // Obtém a URL absoluta do link
+            String url = link.absUrl("href");
 
-            // Verifica se o link termina com ".pdf" antes de adicionar à lista
             if (url.toLowerCase().endsWith(".pdf")) {
                 pdfLinks.add(url);
             }
@@ -35,8 +33,8 @@ public class ScraperService {
 
         return pdfLinks;
     }
-
-    public static void main(String[] args) {
+    // Para testes apenas
+    public static void testScraper() {
         try {
             List<String> links = extractPdfLinks();
             System.out.println("📄 Links de arquivos PDF encontrados:");
@@ -45,4 +43,5 @@ public class ScraperService {
             e.printStackTrace();
         }
     }
+
 }

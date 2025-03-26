@@ -1,4 +1,4 @@
-package scraping;
+package intuitive.nivelamento.webscraping.services;
 
 import java.io.*;
 import java.nio.file.*;
