@@ -1,5 +1,7 @@
 package intuitive.nivelamento.webscraping.services;
 
+import intuitive.nivelamento.webscraping.interfaces.DownloaderInterface;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -8,16 +10,13 @@ import java.util.List;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
-public class DownloaderService {
+public class DownloaderService implements DownloaderInterface {
 
     private static final String DOWNLOAD_DIR = "downloads/";
 
-    public static List<String> downloadFilesParallel(List<String> fileUrls) throws InterruptedException, ExecutionException {
-        try {
-            Files.createDirectories(Paths.get(DOWNLOAD_DIR));
-        } catch (IOException e) {
-            throw new RuntimeException("Erro ao criar diretório de downloads", e);
-        }
+    @Override
+    public List<String> downloadFilesParallel(List<String> fileUrls) throws InterruptedException, ExecutionException, IOException {
+        Files.createDirectories(Paths.get(DOWNLOAD_DIR));
 
         ExecutorService executor = Executors.newFixedThreadPool(2);
         List<Future<String>> futures = fileUrls.stream()
@@ -30,7 +29,6 @@ public class DownloaderService {
         return futures.stream().map(DownloaderService::getFutureResult).collect(Collectors.toList());
     }
 
-
     private static String getFutureResult(Future<String> future) {
         try {
             return future.get();
@@ -39,7 +37,7 @@ public class DownloaderService {
         }
     }
 
-    public static String downloadFile(String fileUrl) throws IOException {
+    private static String downloadFile(String fileUrl) throws IOException {
         URL url = new URL(fileUrl);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
